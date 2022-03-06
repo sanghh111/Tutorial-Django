@@ -680,10 +680,10 @@ from django.http import HttpResponse
 from .models import Question
 
 
-def index(request):
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;    latest_question_list = Question.objects.order_by('-pub_date')[:5]
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;    output = ', '.join([q.question_text for q in latest_question_list])
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;    return HttpResponse(output)
+def index(request):<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;    latest_question_list = Question.objects.order_by('-pub_date')[:5]<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;    output = ', '.join([q.question_text for q in latest_question_list])<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;    return HttpResponse(output)<br>
 
 <p># Leave the rest of the views (detail, results, vote) unchanged</p>
 
