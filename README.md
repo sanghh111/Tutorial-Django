@@ -1,7 +1,8 @@
 <b>
 Lộ trình học DJango của mình:
 
-<li>Đầu tiên mình sẽ đọc hết tài liệu và thực hành hết ở trên trang turrial và mình sẽ tổng kết lại sau<br>
+<li>Đầu tiên mình sẽ đọc hết tài liệu và thực hành hết ở trên trang tutorial và mình sẽ tổng kết lại sau. Ngoài ra mình kết hợp đọc nhiều bài blog về django để có cái nhìn tổng quát hơn về lộ trình học django và tiếp đến là các thứ nâng cao lên giúp cho mình trong việc lập trình.<br>
+<li> Mình recoment các bạn đọc doc ở trang chính của django để hiểu rõ hơn về từng phương thức hoạt động như thế nào.
 <li>Tìm hiều về API DATABASE mình thấy khá hay nên cần tìm hiểu kĩ về nó.
 <li> Mình sẽ lên bài test sau khi hoàn thành turrial trên trang document của django
 <li>Sau đó mình nghĩ học tiếp rest api của django
@@ -692,10 +693,78 @@ def index(request):<br>
 </table>
 
 
-Tuy nhiên, có một vấn đề ở đây: thiết kế của trang được mã hóa cứng trong chế độ xem. Nếu bạn muốn thay đổi giao diện của trang, bạn sẽ phải chỉnh sửa mã Python này. Vì vậy, hãy sử dụng hệ thống mẫu của Django để tách thiết kế khỏi Python bằng cách tạo mẫu mà chế độ xem có thể sử dụng.
+Tuy nhiên, có một vấn đề ở đây: thiết kế của trang được mã hóa cứng trong chế độ xem. Nếu bạn muốn thay đổi giao diện của trang, bạn sẽ phải chỉnh sửa mã Python này. Vì vậy, hãy sử dụng hệ thống mẫu của Django để tách thiết kế khỏi Python bằng cách tạo mẫu mà chế độ xem có thể sử dụng.<br><br>
 
-Đầu tiên, tạo một đường dẫn gọi là templates ở trong thư mục polls của bạn. Django sẽ xem các mẫu của bạn ở đây.
+Đầu tiên, tạo một đường dẫn gọi là templates ở trong thư mục polls của bạn. Django sẽ xem các mẫu của bạn ở đây.<br><br>
 
-Cấu hính templates cho project của bạn mô tả django sẽ tải và trích render templates. Các cấu hình tệp cài đặc mặc định <b>DjangoTemplates</b> backend mà tùy chọn <b>APP_DIRS</b> đặt TRUE. Bằng quy ước <b>DjangoTemplates</b> tìm kiếm một tệp con ở mỗi <b>INSTALLED_APPS</b>
+Cấu hính templates cho project của bạn mô tả django sẽ tải và trích render templates. Các cấu hình tệp cài đặc mặc định <b>DjangoTemplates</b> backend mà tùy chọn <b>APP_DIRS</b> đặt TRUE. Bằng quy ước <b>DjangoTemplates</b> tìm kiếm một tệp con ở mỗi <b>INSTALLED_APPS</b><br><br>
 
-Cùng với thư mục <b>templates</b> bạn đã tạo từ trước, tạo một thư mục khác gọi là polls và cùng với    
+Cùng với thư mục <b>templates</b> bạn đã tạo từ trước, tạo một thư mục khác gọi là polls cùng với thư mục vừa tạo bạn tạo thêm file là <b>index.html</b>. Nói cách khác, Template của bạn  sẽ ở <b>polls/templates/polls/index.html</b>. Bởi vì cách tải dữ liệu từ <b>app_directories</b> như mô tả của bạn.
+
+Bỏ code vào template của bạn <b>polls/templates/polls/index.html</b>:
+
+![code template index](./Image/Template_index.png "Text to show on mouseover").
+
+<table>
+
+<th>Chú ý
+</th>
+
+<td>Để làm cho bài hướng dẫn ngắn hơn, tất cả template sử dụng HTML chưa hoàn thiện. Ở trong dự án của bạn sẽ phải sử dụng hoàn thiện thiện <a href = "https://developer.mozilla.org/en-US/docs/Learn/HTML/Introduction_to_HTML/Getting_started#anatomy_of_an_html_document"> HTML</a>
+</td>
+
+</table>
+
+Bây giờ chúng ta hãy cải thiện <b>index</b> view <b>polls/views.py</b> để sử dụng template:
+
+<table>
+
+<td>
+
+from django.http import HttpResponse<br>
+from django.template import loader<br>
+<br><br>
+from .models import Question<br><br>
+
+
+def index(request):<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;    latest_question_list = Question.objects.order_by('-pub_date')[:5]<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;    template = loader.get_template('polls/index.html')<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;    context = {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;        'latest_question_list': latest_question_list,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;    }
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;    return HttpResponse(template.render(context, request))<br>
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;
+</td>
+</table>
+
+Mình phân tích code:
+
+<li> Gọi tới djano.template để gọi tới loader
+<li> loader sử dụng phương thức get_template("vị trí hồi nãy ta tạo index.html"). Theo minh hiểu nó sẽ vào thu mục template tại nơi chương trình đang gọi phương thức đó.
+
+
+<h3>Đường tắt: render()</h3>
+
+Đó là một thành ngữ để tải dữ liệu template,  điền vào ngữ cảnh và trả về đối tượng HttpResponse() với kết quả của kết xuất template. Django cung cấp 1 đường tắt. Đây là toàn cảnh hàm  index()  được viết:
+
+<table>
+
+<td>
+
+from django.shortcuts import render<br>
+
+from .models import Question<br>
+
+
+def index(request):<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;    latest_question_list = Question.objects.order_by('-pub_date')[:5]<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;    context = {'latest_question_list': latest_question_list}<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;    return render(request, 'polls/index.html', context)<br>
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;
+</td>
+</table>
+
+Hàm render() nhận tham só đàu tiền là đối tượng request, tham số thứ 2 đường dẫn template, và tham số thú 3 là tham số không bắt buộc. Nó sẽ trả về đối tượng HttpResponse và nhân template đã kết xuất với các giá trị kèm theo nếu có. 
