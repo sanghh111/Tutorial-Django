@@ -768,3 +768,35 @@ def index(request):<br>
 </table>
 
 Hàm render() nhận tham só đàu tiền là đối tượng request, tham số thứ 2 đường dẫn template, và tham số thú 3 là tham số không bắt buộc. Nó sẽ trả về đối tượng HttpResponse và nhân template đã kết xuất với các giá trị kèm theo nếu có. 
+
+
+<h3>Phát sinh lỗi 404</h3>
+
+Bây giờ, hãy giải quyết chế độ xem chi tiết câu hỏi - trang hiển thị văn bản câu hỏi cho một cuộc thăm dò nhất định. Đây là code:
+
+<table>
+
+<td>
+
+from django.http import Http404<br>
+from django.shortcuts import render<br>
+<br>
+from .models import Question<br>
+# ...<br>
+def detail(request, question_id):<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;    try:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;        question = Question.objects.get(pk=question_id)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;    except Question.DoesNotExist:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;        raise Http404("Question does not exist")<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;    return render(request, 'polls/detail.html', {'question': question})<br>
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;
+</td>
+</table>
+
+
+Ở đây có một cách thức mới. Nếu không tìm thấy câu hỏi thì nó sẽ báo lỗi
+
+Tạo thêm 1 template <b>polls/detail.html</b>. Ở đây tôi muốn tạo một mẫu nhanh chỉ hiện được ví dụ của chúng tôis.
+
+![code template detail](./Image/Template_detail.png"Text to show on mouseover").
